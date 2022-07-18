@@ -23,13 +23,9 @@ defmodule Servy.Handler do
   """
   def parse(request) do
     [top, params] = request |> String.split("\n\n")
-
     [request_line | header_lines] = String.split(top, "\n")
-
     [method, path, _] = String.split(request_line, " ")
-
     headers = parse_headers(header_lines, %{})
-
     params_decoded = parse_params(headers["Content-Type"], params)
 
     %Conv{  method: method,
@@ -40,10 +36,10 @@ defmodule Servy.Handler do
             headers: headers }
   end
 
-  def parse_params(params) do
-    params |> String.trim |> URI.decode_query
-  end
-
+  @doc """
+  This takes in a set of query string parameters and returns them in a map. We currently only
+  support application/x-www-form-urlencoded headers.
+  """
   def parse_params("application/x-www-form-urlencoded", params) do
     params |> String.trim |> URI.decode_query
   end
