@@ -3,6 +3,7 @@ defmodule Servy.Router do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.Api
 
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
     %{ conv | status_code: 200, resp_body: "Bears, Lions, Tigers, Dookie, Nöödle, and Mookie" }
@@ -25,6 +26,10 @@ defmodule Servy.Router do
 
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
     BearController.index(conv)
+  end
+
+  def route(%Conv{method: "GET", path: "/api/bears"} = conv) do
+    Api.BearController.index(conv)
   end
 
   def route(%Conv{method: "GET", path: "/bears/new"} = conv) do

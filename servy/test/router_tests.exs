@@ -2,6 +2,7 @@ defmodule RouterTests do
   use ExUnit.Case
   alias Servy.Router
   alias Servy.Handler
+  alias Servy.Conv
 
   test "Test GET /wildthings" do
     request = """
@@ -211,6 +212,30 @@ defmodule RouterTests do
 
     assert response.status_code == 404
     assert response.resp_body == "#{conv.path} not found"
+  end
+
+  test "Test JSON response for /api/bears" do
+    request = """
+    GET /api/bears HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.status_code == 200
+    assert response.resp_body == "[{\"type\":\"Grizzly\",\"name\":\"Brutus\",\"id\":6,\"hibernating\":false},{\"type\":\"Polar\",\"name\":\"Iceman\",\"id\":9,\"hibernating\":true},{\"type\":\"Grizzly\",\"name\":\"Kenai\",\"id\":10,\"hibernating\":false},{\"type\":\"Brown\",\"name\":\"Paddington\",\"id\":3,\"hibernating\":false},{\"type\":\"Panda\",\"name\":\"Roscoe\",\"id\":8,\"hibernating\":false},{\"type\":\"Black\",\"name\":\"Rosie\",\"id\":7,\"hibernating\":true},{\"type\":\"Grizzly\",\"name\":\"Scarface\",\"id\":4,\"hibernating\":true},{\"type\":\"Black\",\"name\":\"Smokey\",\"id\":2,\"hibernating\":false},{\"type\":\"Polar\",\"name\":\"Snow\",\"id\":5,\"hibernating\":false},{\"type\":\"Brown\",\"name\":\"Teddy\",\"id\":1,\"hibernating\":true}]"
+    assert response == %Conv{method: "GET",
+                            headers: %{"Accept" => "*/*", "Host" => "example.com", "User-Agent" => "ExampleBrowser/1.0"},
+                            path: "/api/bears",
+                            status_code: 200,
+                            params: %{},
+                            content_type: "application/json",
+                            resp_body: "[{\"type\":\"Grizzly\",\"name\":\"Brutus\",\"id\":6,\"hibernating\":false},{\"type\":\"Polar\",\"name\":\"Iceman\",\"id\":9,\"hibernating\":true},{\"type\":\"Grizzly\",\"name\":\"Kenai\",\"id\":10,\"hibernating\":false},{\"type\":\"Brown\",\"name\":\"Paddington\",\"id\":3,\"hibernating\":false},{\"type\":\"Panda\",\"name\":\"Roscoe\",\"id\":8,\"hibernating\":false},{\"type\":\"Black\",\"name\":\"Rosie\",\"id\":7,\"hibernating\":true},{\"type\":\"Grizzly\",\"name\":\"Scarface\",\"id\":4,\"hibernating\":true},{\"type\":\"Black\",\"name\":\"Smokey\",\"id\":2,\"hibernating\":false},{\"type\":\"Polar\",\"name\":\"Snow\",\"id\":5,\"hibernating\":false},{\"type\":\"Brown\",\"name\":\"Teddy\",\"id\":1,\"hibernating\":true}]"
+                            }
   end
 
 end
