@@ -53,7 +53,7 @@ defmodule Servy.Router do
   end
 
   def route(%Conv{method: "POST", path: "/bears"} = conv) do
-    BearController.create(conv, conv.params)
+    BearController.create(conv)
   end
 
   def route(%Conv{method: "GET", path: path} = conv) do

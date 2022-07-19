@@ -25,7 +25,7 @@ defmodule Servy.BearController do
     %{ conv | status_code: 200, resp_body: content }
   end
 
-  def create(conv, params) do
+  def create(conv) do
     %{ conv | status_code: 201, resp_body: "New Bear named: #{conv.params["name"]}, of type: #{conv.params["type"]}"}
   end
 end
