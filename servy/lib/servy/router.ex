@@ -13,6 +13,16 @@ defmodule Servy.Router do
     BearController.show(conv, params)
   end
 
+  def route(%Conv{method: "GET", path: "/wildthings?id=" <> id} = conv) do
+    params = Map.put(conv.params, "id", id)
+    BearController.show(conv, params)
+  end
+
+  def route(%Conv{method: "GET", path: "/wildlife"} = conv) do
+    conv = %{conv | path: "/wildthings"}
+    route(conv)
+  end
+
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
     BearController.index(conv)
   end

@@ -2,7 +2,6 @@ defmodule RouterTests do
   use ExUnit.Case
   alias Servy.Router
   alias Servy.Handler
-  alias Servy.Conv
 
   test "Test GET /wildthings" do
     request = """
@@ -17,6 +16,25 @@ defmodule RouterTests do
     response = Router.route(conv)
 
     assert response.resp_body == "Bears, Lions, Tigers, Dookie, Nöödle, and Mookie"
+  end
+
+  test "Test GET /wildthings?{id}=8 where {id} is a number." do
+    request = """
+    GET /wildthings?id=8 HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.resp_body == """
+    <h1>Show Bear</h1>
+    <p>
+        Is Roscoe 8 hibernating? <strong>false</strong>
+    </p>
+    """
   end
 
   test "Test GET /wildthings/{id} where {id} is a number." do
@@ -37,6 +55,21 @@ defmodule RouterTests do
     </p>
     """
   end
+
+  test "Test GET /wildlife and re-write" do
+    request = """
+    GET /wildlife HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.resp_body == "Bears, Lions, Tigers, Dookie, Nöödle, and Mookie"
+  end
+
 
   test "Test GET /bears" do
     request = """
@@ -106,6 +139,78 @@ defmodule RouterTests do
       </p>
     </form>
     """
+  end
+
+  test "Test GET /bears/{id} where {id} is a number." do
+    request = """
+    GET /bears/9 HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.resp_body == """
+    <h1>Show Bear</h1>
+    <p>
+        Is Iceman 9 hibernating? <strong>true</strong>
+    </p>
+    """
+  end
+
+  test "Test GET /about" do
+    request = """
+    GET /about HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.resp_body == """
+    <h1>Clark's Wildthings Refuge</h1>
+
+    <blockquote>
+    When we contemplate the whole globe...
+    </blockquote>
+    """
+  end
+
+  test "Test POST /bears" do
+    request = """
+    POST /bears HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+    Content-Lenght: 21
+
+    name=Baloo&type=Brown
+    """
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.resp_body == "New Bear named: #{conv.params["name"]}, of type: #{conv.params["type"]}"
+  end
+
+  test "Test get path that is not found. It returns 404" do
+    request = """
+    GET /pokemon HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    conv = Handler.parse(request)
+    response = Router.route(conv)
+
+    assert response.status_code == 404
+    assert response.resp_body == "#{conv.path} not found"
   end
 
 end

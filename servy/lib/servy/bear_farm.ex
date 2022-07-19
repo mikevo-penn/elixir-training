@@ -24,21 +24,20 @@ defmodule Servy.BearFarm do
     iex> alias Servy.BearFarm
     iex> id = 1
     iex> bear = BearFarm.get_bear(id)
-    %Bear{id: 1, name: "Teddy", type: "Brown", hibernating: true}
+    iex> assert bear == %Bear{id: 1, name: "Teddy", type: "Brown", hibernating: true}
 
   ## Example 2 - Get a bear based on id as a String "2"
     iex> alias Servy.Bear
     iex> alias Servy.BearFarm
     iex> id = "2"
     iex> bear = BearFarm.get_bear(id)
-    %Bear{id: 2, name: "Smokey", type: "Black"}
+    iex> assert bear == %Bear{id: 2, name: "Smokey", type: "Black"}
 
   ## Example 3 - Get a bear that doesn't exist."
-    iex> alias Servy.Bear
     iex> alias Servy.BearFarm
     iex> id = 69
     iex> bear = BearFarm.get_bear(id)
-    nil
+    iex> assert bear == nil
   """
   def get_bear(id) when is_integer(id) do
     Enum.find(list_bears(), fn(x) -> x.id == id end)
