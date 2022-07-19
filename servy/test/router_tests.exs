@@ -6,11 +6,11 @@ defmodule RouterTests do
 
   test "Test GET /wildthings" do
     request = """
-    GET /wildthings HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /wildthings HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     conv = Handler.parse(request)
@@ -21,11 +21,11 @@ defmodule RouterTests do
 
   test "Test GET /wildthings?{id}=8 where {id} is a number." do
     request = """
-    GET /wildthings?id=8 HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /wildthings?id=8 HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -40,11 +40,11 @@ defmodule RouterTests do
 
   test "Test GET /wildthings/{id} where {id} is a number." do
     request = """
-    GET /wildthings/3 HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /wildthings/3 HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -59,11 +59,11 @@ defmodule RouterTests do
 
   test "Test GET /wildlife and re-write" do
     request = """
-    GET /wildlife HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /wildlife HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -74,11 +74,11 @@ defmodule RouterTests do
 
   test "Test GET /bears" do
     request = """
-    GET /bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -115,11 +115,11 @@ defmodule RouterTests do
 
   test "Test GET /bears/new" do
     request = """
-    GET /bears/new HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /bears/new HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -144,11 +144,11 @@ defmodule RouterTests do
 
   test "Test GET /bears/{id} where {id} is a number." do
     request = """
-    GET /bears/9 HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /bears/9 HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -163,11 +163,11 @@ defmodule RouterTests do
 
   test "Test GET /about" do
     request = """
-    GET /about HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /about HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -183,14 +183,14 @@ defmodule RouterTests do
 
   test "Test POST /bears" do
     request = """
-    POST /bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-    Content-Type: application/x-www-form-urlencoded
-    Content-Lenght: 21
-
-    name=Baloo&type=Brown
+    POST /bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    Content-Type: application/x-www-form-urlencoded\r
+    Content-Lenght: 21\r
+    \r
+    name=Baloo&type=Brown\r
     """
     conv = Handler.parse(request)
     response = Router.route(conv)
@@ -200,11 +200,11 @@ defmodule RouterTests do
 
   test "Test get path that is not found. It returns 404" do
     request = """
-    GET /pokemon HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /pokemon HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     conv = Handler.parse(request)
@@ -216,11 +216,11 @@ defmodule RouterTests do
 
   test "Test JSON response for /api/bears" do
     request = """
-    GET /api/bears HTTP/1.1
-    Host: example.com
-    User-Agent: ExampleBrowser/1.0
-    Accept: */*
-
+    GET /api/bears HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
     """
 
     conv = Handler.parse(request)

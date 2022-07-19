@@ -22,8 +22,8 @@ defmodule Servy.Handler do
   Parses request into smaller parts.
   """
   def parse(request) do
-    [top, params] = request |> String.split("\n\n")
-    [request_line | header_lines] = String.split(top, "\n")
+    [top, params] = request |> String.split("\r\n\r\n")
+    [request_line | header_lines] = String.split(top, "\r\n")
     [method, path, _] = String.split(request_line, " ")
     headers = parse_headers(header_lines, %{})
     params_decoded = parse_params(headers["Content-Type"], params)
@@ -56,10 +56,10 @@ defmodule Servy.Handler do
 
   def format_response(%Conv{} = conv) do
     """
-    HTTP/1.1 #{Servy.Conv.full_response(conv)}
-    Content-Type: text/html
-    Content-Length: #{byte_size(conv.resp_body)}
-
+    HTTP/1.1 #{Servy.Conv.full_response(conv)}\r
+    Content-Type: text/html\r
+    Content-Length: #{byte_size(conv.resp_body)}\r
+    \r
     #{conv.resp_body}
     """
   end
