@@ -6,6 +6,39 @@ defmodule HttpServerTests do
   # Globally spawn the expected http server on port 4000
   pid = spawn(HttpServer, :start, [4000])
 
+  test "requests using Task and Await" do
+    url = "http://localhost:4000/wildthings"
+
+    1..5
+    |> Enum.map(fn(_) -> Task.async(fn -> HTTPoison.get(url) end) end)
+    |> Enum.map(&Task.await/1)
+    |> Enum.map(&assert_successful_response/1)
+  end
+
+  test "requests multiple URLS" do
+    urls = [
+      "http://localhost:4000/wildthings",
+      "http://localhost:4000/wildlife",
+      "http://localhost:4000/bears",
+      "http://localhost:4000/api/bears",
+      "http://localhost:4000/about"
+    ]
+
+    urls
+    |> Enum.map(&Task.async(fn -> HTTPoison.get(&1) end))
+    |> Enum.map(&Task.await(&1))
+    |> Enum.map(&assert_successful_response_code(&1))
+  end
+
+  defp assert_successful_response_code({:ok, response}) do
+    assert response.status_code == 200
+  end
+
+  defp assert_successful_response({:ok, response}) do
+    assert response.status_code == 200
+    assert response.body == "Bears, Lions, Tigers, Dookie, Nöödle, and Mookie"
+  end
+
   test "requests and responses via HttPoison" do
     {:ok, response} = HTTPoison.get "http://localhost:4000/wildthings"
 
