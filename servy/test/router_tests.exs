@@ -179,6 +179,7 @@ defmodule RouterTests do
     When we contemplate the whole globe...
     </blockquote>
     """
+
   end
 
   test "Test POST /bears" do
